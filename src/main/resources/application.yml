@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: ecar-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ecardb
+    username: postgres
+    password: postgres
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: 50
+      minimum-idle: 25
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 473352860327-9vkk32tvrtahrpq5t2fkubq84mebdcmf.apps.googleusercontent.com
+            client-secret: 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
+            scope: openid, profile, email
+server:
+  port: 8080
+logging:
+  level:
+    org.springframework.security: INFO
