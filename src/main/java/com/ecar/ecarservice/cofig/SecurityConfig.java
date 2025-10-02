@@ -34,6 +34,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/actuator/health", "/error").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/public/**").permitAll()
+                        .requestMatchers("/api/users/**").permitAll()   //  thêm dòng này
+
                         .requestMatchers(HttpMethod.GET, "/api/me").authenticated()
                         .anyRequest().authenticated()
                 )

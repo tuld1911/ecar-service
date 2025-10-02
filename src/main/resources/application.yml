@@ -2,9 +2,9 @@ spring:
   application:
     name: ecar-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/ecardb # postgres sql url
+    url: jdbc:postgresql://localhost:5432/ecar_db # postgres sql url
     username: postgres # postgres username
-    password: postgres # postgres password
+    password: 123 # postgres password (local)
     # config thread-pool
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
