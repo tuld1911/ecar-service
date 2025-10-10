@@ -24,5 +24,10 @@ public class ServiceRecordDetail {
     @Column(nullable = false)
     private MaintenanceAction action; // Hành động đã làm: INSPECT hoặc REPLACE
 
+    @Column(nullable = false)
+    private double cost; // Chi phí của hạng mục này
+    @Column(nullable = false)
+    private String status = "PENDING";  // hoặc Enum nếu bạn có loại trạng thái cụ thể
+
     private String notes; // Ghi chú của kỹ thuật viên
 }
