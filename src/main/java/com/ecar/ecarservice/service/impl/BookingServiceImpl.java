@@ -1,4 +1,4 @@
-package com.ecar.ecarservice.service;
+package com.ecar.ecarservice.service.impl;
 
 import com.ecar.ecarservice.dto.BookingRequestDto;
 import com.ecar.ecarservice.dto.BookingResponseDto;
@@ -6,6 +6,7 @@ import com.ecar.ecarservice.enitiies.AppUser;
 import com.ecar.ecarservice.enitiies.Booking;
 import com.ecar.ecarservice.enums.BookingStatus;
 import com.ecar.ecarservice.repositories.BookingRepository;
+import com.ecar.ecarservice.service.BookingService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
