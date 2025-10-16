@@ -1,0 +1,143 @@
+Table customers {
+  id INT [pk, increment]
+  full_name VARCHAR(200) [not null]
+  phone_number VARCHAR(15)
+  email VARCHAR(200) [unique]
+  address TEXT
+  created_at DATETIME [default: `now()`]
+  updated_at DATETIME
+}
+Table vehicles {
+  id INT [pk, increment]
+  customer_id INT [ref: > customers.id, not null]
+  license_plate VARCHAR(20)
+  model VARCHAR(100)
+  vin VARCHAR(50) [unique]
+  purchase_date DATE
+  last_service_date DATE
+  last_service_odometer INT
+  created_at DATETIME [default: `now()`]
+  updated_at DATETIME
+}
+Table vehicles {
+  id INT [pk, increment]
+  customer_id INT [ref: > customers.id, not null]
+  license_plate VARCHAR(20)
+  model VARCHAR(100)
+  vin VARCHAR(50) [unique]
+  purchase_date DATE
+  last_service_date DATE
+  last_service_odometer INT
+  created_at DATETIME [default: `now()`]
+  updated_at DATETIME
+}
+Table service_centers {
+  id INT [pk, increment]
+  center_name VARCHAR(200) [not null]
+  address TEXT [not null]
+  hotline VARCHAR(50)
+  created_at DATETIME [default: `now()`]
+  updated_at DATETIME
+}
+Table staff {
+  id INT [pk, increment]
+  full_name VARCHAR(200) [not null]
+  role VARCHAR(50) [not null] // Admin, Staff, Technician
+  email VARCHAR(200) [unique, not null]
+  phone_number VARCHAR(15)
+  service_center_id INT [ref: > service_centers.id, not null]
+  specialization VARCHAR(100)
+  created_at DATETIME [default: `now()`]
+  updated_at DATETIME
+}
+Table work_shifts {
+  id INT [pk, increment]
+  staff_id INT [ref: > staff.id, not null]
+  shift_date DATE [not null]
+  shift_time VARCHAR(50) // Morning, Afternoon, Evening
+  created_at DATETIME [default: `now()`]
+}
+Table appointments {
+  id INT [pk, increment]
+  customer_id INT [ref: > customers.id, not null]
+  vehicle_id INT [ref: > vehicles.id, not null]
+  service_center_id INT [ref: > service_centers.id, not null]
+  scheduled_date DATETIME [not null]
+  status VARCHAR(50) [default: 'pending'] // pending, confirmed, cancelled, completed
+  notes TEXT
+  created_at DATETIME [default: `now()`]
+  updated_at DATETIME
+}
+Table service_orders {
+  id INT [pk, increment]
+  appointment_id INT [ref: > appointments.id, not null]
+  technician_id INT [ref: > staff.id, not null]
+  service_center_id INT [ref: > service_centers.id, not null]
+  diagnosis TEXT
+  total_cost DECIMAL(10,2) [default: 0.00]
+  status VARCHAR(50) [default: 'assigned'] // assigned, in_progress, completed
+  start_time DATETIME
+  end_time DATETIME
+  created_at DATETIME [default: `now()`]
+  updated_at DATETIME
+}
+Table parts {
+  id INT [pk, increment]
+  part_name VARCHAR(200) [not null]
+  serial_number VARCHAR(100) [unique]
+  category VARCHAR(100)
+  unit_price DECIMAL(10,2)
+  created_at DATETIME [default: `now()`]
+  updated_at DATETIME
+}
+Table inventories {
+  id INT [pk, increment]
+  service_center_id INT [ref: > service_centers.id, not null]
+  part_id INT [ref: > parts.id, not null]
+  quantity INT [not null]
+  minimum_stock INT [default: 1]
+  status VARCHAR(50) [default: 'available']
+  updated_at DATETIME
+}
+Table part_usage {
+  id INT [pk, increment]
+  service_order_id INT [ref: > service_orders.id, not null]
+  part_id INT [ref: > parts.id, not null]
+  quantity_used INT [default: 1]
+  cost DECIMAL(10,2)
+  created_at DATETIME [default: `now()`]
+}
+Table payments {
+  id INT [pk, increment]
+  service_order_id INT [ref: > service_orders.id, not null]
+  payment_method VARCHAR(50) // e-wallet, banking, cash
+  payment_status VARCHAR(50) [default: 'unpaid'] // unpaid, paid
+  amount DECIMAL(10,2)
+  paid_at DATETIME
+  created_at DATETIME [default: `now()`]
+}
+Table notifications {
+  id INT [pk, increment]
+  customer_id INT [ref: > customers.id, not null]
+  title VARCHAR(200)
+  message TEXT
+  type VARCHAR(50) // reminder, promotion, system
+  status VARCHAR(50) [default: 'pending'] // pending, sent, read
+  scheduled_at DATETIME
+  sent_at DATETIME
+}
+Table service_tasks {
+  id INT [pk, increment]
+  service_order_id INT [ref: > service_orders.id, not null]
+  task_description TEXT [not null]
+  task_status VARCHAR(50) [default: 'pending'] // pending, in_progress, completed
+  start_time DATETIME
+  end_time DATETIME
+  created_at DATETIME [default: `now()`]
+}
+
+Customer Service	customers, vehicles, appointments	:Đặt lịch, xem lịch sử, nhắc nhở
+Service Operation	service_orders, service_tasks, staff, work_shifts:	Quản lý kỹ thuật viên, tiến độ dịch vụ
+Inventory & Parts	parts, inventories, part_usage:	Quản lý phụ tùng, tồn kho, đề xuất AI
+Finance	payments, service_orders:Báo giá, hóa đơn, thanh toán online
+Notification System	notifications:	Nhắc nhở bảo dưỡng & thông báo trạng thái
