@@ -7,6 +7,7 @@ import com.ecar.ecarservice.enitiies.Booking;
 import com.ecar.ecarservice.enums.BookingStatus;
 import com.ecar.ecarservice.repositories.BookingRepository;
 import com.ecar.ecarservice.service.BookingService;
+import com.ecar.ecarservice.service.EmailService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +18,11 @@ import java.util.stream.Collectors;
 public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;
+    private final EmailService emailService;
 
-    public BookingServiceImpl(BookingRepository bookingRepository) {
+    public BookingServiceImpl(BookingRepository bookingRepository, EmailService emailService) {
         this.bookingRepository = bookingRepository;
+        this.emailService = emailService; // Inject EmailService
     }
 
     @Override
@@ -40,6 +43,9 @@ public class BookingServiceImpl implements BookingService {
         booking.setStatus(BookingStatus.PENDING);
 
         Booking savedBooking = bookingRepository.save(booking);
+
+        // --- GỌI GỬI MAIL ---
+        emailService.sendBookingConfirmationEmail(savedBooking);
 
         // Chuyển đổi sang DTO trước khi trả về
         return convertToDto(savedBooking);
@@ -105,6 +111,4 @@ public class BookingServiceImpl implements BookingService {
 
         return dto;
     }
-
-
 }
