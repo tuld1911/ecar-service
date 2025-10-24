@@ -15,7 +15,8 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/admin/users")
+@PreAuthorize("hasRole('ADMIN')")
 public class UserController {
     private final UserService userService;
 
@@ -23,29 +24,25 @@ public class UserController {
         this.userService = userService;
     }
 
-    // 1. Get List of Users
     @GetMapping
     public ResponseEntity<List<UserDto>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    // 2. Get User with ID
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
-    // 3. Update User (ví dụ: chỉ cập nhật role)
     @PutMapping("/{id}")
     public ResponseEntity<UserDto> updateUserRoles(@PathVariable Long id, @RequestBody Set<AppRole> roles) {
         return ResponseEntity.ok(userService.updateUserRoles(id, roles));
     }
 
-    // 4. Delete User
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
-        return ResponseEntity.noContent().build(); // Trả về 204 No Content
+        return ResponseEntity.noContent().build();
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
