@@ -1,5 +1,6 @@
 package com.ecar.ecarservice.controller;
 
+import com.ecar.ecarservice.dto.UserCreateDTO;
 import com.ecar.ecarservice.dto.UserDto;
 import com.ecar.ecarservice.enitiies.AppUser;
 import com.ecar.ecarservice.enums.AppRole;
@@ -36,9 +37,10 @@ public class UserController {
     }
 
     // 3. Update User (ví dụ: chỉ cập nhật role)
-    @PutMapping("/{id}")
-    public ResponseEntity<UserDto> updateUserRoles(@PathVariable Long id, @RequestBody Set<AppRole> roles) {
-        return ResponseEntity.ok(userService.updateUserRoles(id, roles));
+    @RequestMapping(value = "", method = RequestMethod.PUT)
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserCreateDTO userCreateDTO) {
+        return ResponseEntity.ok(userService.updateUser(userCreateDTO));
     }
 
     // 4. Delete User
@@ -46,6 +48,12 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build(); // Trả về 204 No Content
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    public ResponseEntity<Void> createUser(@RequestBody UserCreateDTO userCreateDTO) {
+        this.userService.createUser(userCreateDTO);
+        return ResponseEntity.ok().build();
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
