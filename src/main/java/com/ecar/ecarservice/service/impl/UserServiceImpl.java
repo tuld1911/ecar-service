@@ -9,6 +9,7 @@ import com.ecar.ecarservice.repositories.AppUserRepository;
 import com.ecar.ecarservice.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
@@ -45,6 +46,7 @@ public class UserServiceImpl implements UserService {
         user.setFullName(userCreateDTO.getFullName());
         Set<AppRole> roles = Set.of(AppRole.valueOf(userCreateDTO.getRole()));
         user.setRoles(roles);
+        user.setPhoneNo(userCreateDTO.getPhoneNo());
         AppUser updatedUser = appUserRepository.save(user);
         return convertToDto(updatedUser);
     }
@@ -78,8 +80,15 @@ public class UserServiceImpl implements UserService {
         AppUser appUser = new AppUser();
         appUser.setEmail(userCreateDTO.getEmail());
         appUser.setFullName(userCreateDTO.getFullName());
+        appUser.setPhoneNo(userCreateDTO.getPhoneNo());
         Set<AppRole> roles = Set.of(AppRole.valueOf(userCreateDTO.getRole()));
         appUser.setRoles(roles);
         this.appUserRepository.save(appUser);
+    }
+
+    @Override
+    public AppUser getCurrentUser(OidcUser oidcUser) {
+        return this.appUserRepository.findBySub(oidcUser.getSubject())
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }

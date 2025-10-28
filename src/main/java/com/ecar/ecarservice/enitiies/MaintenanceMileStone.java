@@ -2,7 +2,9 @@ package com.ecar.ecarservice.enitiies;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -12,43 +14,22 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "vehicles")
+@Table(name = "maintenance_milestone")
 @Getter
 @Setter
+@ToString
+@RequiredArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Vehicle {
-
+public class MaintenanceMileStone {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "owner_id")
-    private Long ownerId;
+    @Column(name = "kilometer_at")
+    private Long kilometerAt;
 
-    @Column(nullable = false, unique = true)
-    private String licensePlate;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "car_model_id", nullable = false)
-    private CarModel carModel;
-
-    @Column(name = "vin_number")
-    private String vinNumber;
-
-    @Column(name = "next_km")
-    private Long nextKm;
-
-    @Column(name = "next_date")
-    private LocalDateTime nextDate;
-
-    @Column(name = "old_km")
-    private Long oldKm;
-
-    @Column(name = "old_date")
-    private LocalDateTime oldDate;
-
-    @Column(nullable = false)
-    private boolean active = true;
+    @Column(name = "year_at")
+    private Long yearAt;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -65,5 +46,4 @@ public class Vehicle {
     @LastModifiedBy
     @Column(insertable = false)
     private String updatedBy;
-
 }

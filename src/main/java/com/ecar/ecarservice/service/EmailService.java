@@ -1,6 +1,5 @@
 package com.ecar.ecarservice.service;
 
-import com.ecar.ecarservice.dto.MaintenanceScheduleDto;
 import com.ecar.ecarservice.enitiies.AppUser;
 import com.ecar.ecarservice.enitiies.Booking;
 import jakarta.mail.MessagingException;
@@ -63,31 +62,31 @@ public class EmailService {
         System.out.println("Email sent to: " + to);
     }
 
-    @Async
-    public void sendDateBasedMaintenanceReminderEmail(AppUser user, String licensePlate, LocalDate nextDueDate, List<MaintenanceScheduleDto> maintenanceItems) {
-        try {
-            // --- LOGIC LẤY TÊN ---
-            String customerName = (user.getFullName() != null && !user.getFullName().isEmpty())
-                    ? user.getFullName()
-                    : user.getEmail();
-
-            Context context = new Context();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
-            // Truyền tên đã xử lý vào template
-            context.setVariable("customerName", customerName);
-            context.setVariable("licensePlate", licensePlate);
-            context.setVariable("nextDueDate", nextDueDate.format(formatter));
-            // Tính ngày bảo dưỡng cuối từ ngày đáo hạn
-            context.setVariable("lastServiceDate", nextDueDate.minusMonths(12).format(formatter));
-            context.setVariable("maintenanceItems", maintenanceItems); // Truyền nguyên list DTO vào
-
-            String htmlContent = templateEngine.process("date-reminder-email", context);
-
-            sendHtmlEmail(user.getEmail(), "Ecar Service Center - Nhắc nhở bảo dưỡng", htmlContent);
-        } catch (Exception e) {
-            System.err.println("Failed to send date-based maintenance reminder email: " + e.getMessage());
-        }
-    }
+//    @Async
+//    public void sendDateBasedMaintenanceReminderEmail(AppUser user, String licensePlate, LocalDate nextDueDate, List<MaintenanceScheduleDto> maintenanceItems) {
+//        try {
+//            // --- LOGIC LẤY TÊN ---
+//            String customerName = (user.getFullName() != null && !user.getFullName().isEmpty())
+//                    ? user.getFullName()
+//                    : user.getEmail();
+//
+//            Context context = new Context();
+//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+//
+//            // Truyền tên đã xử lý vào template
+//            context.setVariable("customerName", customerName);
+//            context.setVariable("licensePlate", licensePlate);
+//            context.setVariable("nextDueDate", nextDueDate.format(formatter));
+//            // Tính ngày bảo dưỡng cuối từ ngày đáo hạn
+//            context.setVariable("lastServiceDate", nextDueDate.minusMonths(12).format(formatter));
+//            context.setVariable("maintenanceItems", maintenanceItems); // Truyền nguyên list DTO vào
+//
+//            String htmlContent = templateEngine.process("date-reminder-email", context);
+//
+//            sendHtmlEmail(user.getEmail(), "Ecar Service Center - Nhắc nhở bảo dưỡng", htmlContent);
+//        } catch (Exception e) {
+//            System.err.println("Failed to send date-based maintenance reminder email: " + e.getMessage());
+//        }
+//    }
 
 }

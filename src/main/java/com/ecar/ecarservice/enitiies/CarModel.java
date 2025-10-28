@@ -1,51 +1,36 @@
 package com.ecar.ecarservice.enitiies;
 
-import com.ecar.ecarservice.enums.AppRole;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.domain.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
-@Table(name = "app_user")
+@Table(name = "car_model")
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class AppUser {
+public class CarModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "sub", unique = true)
-    private String sub;
+    @Column(name = "car_name")
+    private String carName;
 
-    @Column(name = "email", unique = true)
-    private String email;
+    @Column(name = "car_type")
+    private String carType;
 
-    @Column(name = "full_name")
-    private String fullName;
-
-    @Column(name = "phone_no")
-    private String phoneNo;
-
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "role")
-    @Enumerated(EnumType.STRING)
-    private Set<AppRole> roles = new HashSet<>();
-
-    // Mặc định, tất cả user khi được tạo ra sẽ có active = true
     @Column(name = "active", nullable = false)
     private boolean active = true;
 
