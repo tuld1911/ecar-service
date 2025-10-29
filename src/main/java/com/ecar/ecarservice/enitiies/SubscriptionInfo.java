@@ -37,9 +37,6 @@ public class SubscriptionInfo {
     @Column(name = "payment_date")
     private LocalDateTime paymentDate;
 
-    @Column(name = "status")
-    private String status;
-
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
