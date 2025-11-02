@@ -9,11 +9,14 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.domain.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "app_user")
@@ -64,4 +67,9 @@ public class AppUser {
     @LastModifiedBy
     @Column(name = "updated_by", insertable = false)
     private String updatedBy;
+
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Vehicle> vehicles;
+
 }
